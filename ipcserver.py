@@ -19,7 +19,13 @@ def ipcserver(port, rpc):
         # the rop obj can contain any ropchain. common rpc stuff is appended to the end by us
 
         sz = u32(c.recv(4))
-        obj = c.recv(sz, socket.MSG_WAITALL)
+        print("size: " + hex(sz)) 
+        if hasattr(socket, "MSG_WAITALL"):
+            obj = c.recv(sz, socket.MSG_WAITALL)
+        else:
+            obj = ''
+            while len(obj) < sz:
+                obj = c.recv(sz - len(obj))
 
         rop = pickle.loads(obj)
 

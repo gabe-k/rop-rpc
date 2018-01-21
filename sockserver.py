@@ -12,7 +12,12 @@ def sockserver(host, port, rpc):
 
     c, addr = s.accept()
     print(c, addr)
-    setup_buf = c.recv(0x1000, socket.MSG_WAITALL)
+    if hasattr(socket, "MSG_WAITALL"):
+        setup_buf = c.recv(0x1000, socket.MSG_WAITALL)
+    else:
+        setup_buf = ''
+        while len(setup_buf) < 0x1000:
+            setup_buf += c.recv(0x1000 - len(setup_buf))
 
     data_base = u64(setup_buf, 0)
     main_base = u64(setup_buf, 8)
@@ -40,7 +45,12 @@ def sockserver(host, port, rpc):
 
         print("Sent 0x{:x}".format(ret))
 
-        data = c.recv(RPC_RESPONSE_LEN, socket.MSG_WAITALL)
+        if hasattr(socket, "MSG_WAITALL"):
+            data = c.recv(RPC_RESPONSE_LEN, socket.MSG_WAITALL)
+        else:
+            data = ''
+            while len(data) < RPC_RESPONSE_LEN:
+                data += c.recv(RPC_RESPONSE_LEN - len(data))
 
         rpc.res_q.put(data)
 

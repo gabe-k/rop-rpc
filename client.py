@@ -36,7 +36,13 @@ class Client():
         s.send(obj)
 
         data_len = u32(s.recv(4))
-        data = s.recv(data_len, socket.MSG_WAITALL)
+        if hasattr(socket, "MSG_WAITALL"):
+            data = s.recv(data_len, socket.MSG_WAITALL)
+        else:
+            data = ''
+            while len(data) < data_len:
+                data += s.recv(data_len - len(data))
+
         s.close()
 
         return data
