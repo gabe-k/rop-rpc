@@ -6,7 +6,7 @@ class Gadgets100Webapplet:
 
 
 class Functions100Webapplet:
-    malloc = main_base+0x6338
+    malloc = main_base+0x33c
 
     setjmp = main_base + 0x45f398
     longjmp = main_base + 0x45f308
@@ -20,6 +20,7 @@ class Functions100Webapplet:
 
     svcQueryMemory = main_base + 0x3dab2c
     svcCloseHandle = main_base + 0x3dabfc
+    svcResetSignal = main_base + 0x3dac04
     svcConnectToNamedPort = main_base + 0x3dac4c
     svcSendSyncRequest = main_base + 0x3dac64
     svcSendSyncRequestWithUserBuffer = main_base+0x3dac6c
